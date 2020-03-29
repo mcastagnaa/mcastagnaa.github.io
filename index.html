@@ -1592,7 +1592,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Italy DCP data on COVID-19</h1>
 <h4 class="author">Matteo Castagna</h4>
-<h4 class="date">29 March, 2020 - 19:31</h4>
+<h4 class="date">29 March, 2020 - 19:50</h4>
 
 </div>
 
@@ -1608,7 +1608,7 @@ div.tocify {
 <p>Given what would have been an obvious variable (infections) doesn’t seem to be particularly reliable (see the first part) the common thread for the analysis becomes the dead counts.</p>
 <p>Assuming this is done correctly (fairly safe, as the cause of death is provided following the OMS protocol), and given a relatively tight range of the death rate<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> these are then the numbers guiding the entire work.</p>
 <p>While an estimate of the percentage of population actually infected is calculated by applying a very simple model, the number of predicted deaths is obtained via machine learning using the gradient boosting machine algorithm to identify the correct model (GBM)<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
-<p>GBM seems to offer incouraging results at cross validation level and the predicted path for a selected number of regions is charted at the end<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
+<p>GBM seems to offer encouraging results at cross validation level and the predicted path for a selected number of regions is charted at the end<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
 <div id="the-true-infected-percentage-of-population" class="section level1">
 <h1><span class="header-section-number">1</span> The “true” infected percentage of population</h1>
 <div id="loading-data" class="section level2">
@@ -2367,7 +2367,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <h1><span class="header-section-number">2</span> Charting the daily deaths path</h1>
 <div id="tree-based-model" class="section level2">
 <h2><span class="header-section-number">2.1</span> Tree-based model</h2>
-<p>This is where machine learning (ie, passing data/outcomes and gettin the rules, instead of processing the data/rules to get the outcome) is used.</p>
+<p>This is where machine learning (ie, passing data/outcomes and getting the rules, instead of processing the data/rules to get the outcome) is used.</p>
 <p>The first model implemented is the Generalized Boosted Regression Model (GBM)</p>
 <p>This is a bit of a “black-box” style algorithm which is very useful for prediction<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> and somewhat useful for inference.</p>
 <pre class="r"><code>modelSet &lt;- dfReg %&gt;%
@@ -2409,8 +2409,7 @@ highCorrNames &lt;- names(num.var[, highCorr])</code></pre>
 factData &lt;- predict(trnsFact, fact.var)
 
 fullSet_pp &lt;- cbind(factData, num.var, depVar)</code></pre>
-<p>Cross-validation and the optimization of the hyper-parameters of the GBM algorith is done using the <em>caret</em> package.</p>
-<p>The code-chunk gives the structure of what was used for this part of the job. I left there only the values of the variables being optimized separately. Running the cross validation here would lenghten the time to produce the output considerably and it’s not necessary.</p>
+<p>Cross-validation and the optimization of the hyper-parameters of the GBM algorithm has been done separately as it requires substantial run-time.</p>
 <pre class="r"><code>set.seed(1)
 inTraining &lt;- createDataPartition(fullSet_pp[, dependentVariable], p = 0.7, list = FALSE)
 train &lt;- fullSet_pp[inTraining,]
@@ -2465,7 +2464,7 @@ abline(0,1, col = &quot;red&quot;)</code></pre>
 newDays &lt;- seq(maxDay + 1, maxDay + 15, by = 1)</code></pre>
 <div id="creating-the-independent-variables-dataset" class="section level3">
 <h3><span class="header-section-number">2.2.1</span> Creating the independent variables dataset</h3>
-<p>The four indipendent variable which need to have forward values are:</p>
+<p>The four independent variable which need to have forward values are:</p>
 <ul>
 <li>Number of infected in ICU</li>
 <li>Number of infected home-bound</li>
@@ -2548,7 +2547,7 @@ finalSet &lt;- rbind(pastData, newdataPnts) </code></pre>
 </div>
 <div id="predicting-the-additional-deathsdayregion" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Predicting the additional deaths/day/region</h3>
-<p>Using the new indipendent variables the forward number of additional deaths for each forward day can be predicted and charted at regional level</p>
+<p>Using the new independent variables the forward number of additional deaths for each forward day can be predicted and charted at regional level</p>
 <pre class="r"><code>finalSet %&gt;% ggplot(aes(x = days, y = DDead, linetype = set)) +
   geom_line() +
   geom_vline(xintercept =  max(pastData$days), color = &quot;blue&quot;, size = 0.1) +
